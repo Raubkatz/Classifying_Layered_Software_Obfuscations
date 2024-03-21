@@ -1,0 +1,17 @@
+
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Raubitzek"
+  given-names: "Sebastian"
+  orcid: "https://orcid.org/0000-0003-2206-9263"
+- family-names: "Schrittwieser"
+  given-names: "Sebastian"
+  orcid: "https://orcid.org/0000-0003-2115-2022"
+- family-names: "Wimmer"
+  given-names: "Elisabeth"
+title: "Classifying Layered Software Obfuscations: Machine Learning Code"
+version: 1.0.0
+doi: xxxxxx
+date-released: 2024-03-16
+url: "https://github.com/Raubkatz/Classifying_Layered_Software_Obfuscations"
