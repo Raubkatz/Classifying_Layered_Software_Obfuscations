@@ -23,29 +23,33 @@ import seaborn as sns  # For advanced data visualization.
 import os  # For creating and managing folders
 import copy  # For creating shallow and deep copies of objects.
 from copy import deepcopy as dc  # Importing 'deepcopy' directly for deep copying complex objects like dataframes.
+import sys
+
 
 # Load datasets from CSV files. Specify the separator (';') and decimal point representation ('.').
 compiler_data1 = pd.read_csv('./original_data/results_2023_11_09.csv', sep=';', decimal='.')
 compiler_data2 = pd.read_csv('./original_data/results_new.csv', sep=';', decimal='.')
 
 # Merge the two datasets into one, removing any duplicate entries, and reset the index for clean access.
-compiler_data_all = pd.concat([compiler_data1,compiler_data2]).drop_duplicates().reset_index(drop='index')
+compiler_data_all = pd.concat([compiler_data1,compiler_data2]).drop_duplicates().reset_index(drop=True)
+
+# Exclude all samples where 'samplename' contains "_marked". This exlcudes our data-augmented samples
+compiler_data_all = compiler_data_all[~compiler_data_all['samplename'].str.contains('_marked')]
 
 # Filter out rows from the dataset where the 'samplename' column contains a period ('.').
-# This step may aim to exclude certain types of samples based on naming conventions.
-compiler_data = dc(compiler_data_all[~compiler_data_all['samplename'].str.contains('\.')])
+compiler_data = compiler_data_all[~compiler_data_all['samplename'].str.contains('\.')]
 
 # Exclude samples compiled with specific compilers deemed non-important for the analysis.
-# Here, 'prog_tinycc-latest-default' and 'prog_tendra-latest-default' compilers are excluded.
 compiler_data = compiler_data[compiler_data.compiler != 'prog_tinycc-latest-default']
 compiler_data = compiler_data[compiler_data.compiler != 'prog_tendra-latest-default']
 
 # Perform and display a preliminary analysis on the 'samplename' column to understand its composition.
-# This includes counting unique samples, displaying the frequency of each sample, and listing unique sample names.
 print('Sample-Analysis')
 print(f"Sample uniques: {compiler_data['samplename'].nunique()}")  # Number of unique sample names.
 print(compiler_data['samplename'].value_counts())  # Frequency count of each sample name.
 print(compiler_data['samplename'].unique())  # Array of unique sample names.
+
+#sys.exit()
 
 ## Set y and X for the models
 y = compiler_data.iloc[:, 2]  # set y to be the compiler column
