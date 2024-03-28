@@ -53,7 +53,7 @@ parameter_grid_lgbm = {
 ########################################################################################################################
 split_option = 1  # Defines the type of data split. `0` for a regular train-test split, `1` for a program-based split.
 oversampling = True # Determines whether to apply oversampling to balance the class distribution.
-specific_sample_count = 3000 # The target number of instances per class after applying oversampling.
+specific_sample_count = 2000 # The target number of instances per class after applying oversampling.
 seed = 137 # Seed for random number generators to ensure reproducibility.
 choose_y = 1  # Selector for the target variable: `0` for `y3`, `1` for `y4`, `2` for `y5`.
 opt_n_iter = 100 #Numbers of Iterations for Hyperparameter Optimization
@@ -66,8 +66,8 @@ folder_name = f"./data_split/training_data_seed{seed}_sp{split_option}_os{oversa
 trained_models_dir = f"{folder_name}/trained_models_lgbm"
 results_output_dir = f"{folder_name}/results_lgbm"
 
-print(F'Conf: {folder_name}')
 
+print(folder_name)
 # Check if trained_models_dir exists, if not create it
 if not os.path.exists(trained_models_dir):
     os.makedirs(trained_models_dir, exist_ok=True)

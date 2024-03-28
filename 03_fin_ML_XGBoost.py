@@ -1,60 +1,43 @@
+"""
+This script focuses on applying advanced ensemble and boosting machine learning techniques for classification tasks, specifically utilizing XGBoost for predictive modeling. Aimed at addressing complex datasets with potential class imbalances, it incorporates various over-sampling methods to ensure robust model training and evaluation. The workflow spans from preprocessing data, optimizing model hyperparameters using Bayesian optimization, to in-depth model evaluation and interpretability through SHAP values.
+
+Key Features:
+- Data Preparation: Streamlines data loading, preprocessing, and splitting while ensuring data is ready for modeling.
+- Model Training and Hyperparameter Optimization: Leverages XGBoost, optimized with BayesSearchCV, to find the best model configuration.
+- Comprehensive Model Evaluation: Utilizes accuracy, precision, recall, F1 score, and confusion matrices for detailed performance analysis.
+- Feature Importance Analysis: Offers insight into which features most significantly impact model predictions.
+- Model Interpretability: Incorporates SHAP values to explain the influence of each feature on individual predictions.
+- Results Visualization: Provides visualizations of feature importances and SHAP values for enhanced interpretability.
+
+Workflow:
+1. Data is preprocessed and split according to specified parameters.
+2. The XGBoost model undergoes hyperparameter optimization.
+3. The optimized model is evaluated using a suite of metrics.
+4. Feature importance and SHAP values are computed and visualized.
+5. All results, including models and metrics, are saved for future reference.
+
+Usage:
+- Ensure all dependencies are installed.
+- Configure the PARAMETERS section as per your dataset and requirements.
+- Run the script in a suitable Python environment.
+
+This script is designed for practitioners and researchers who require an end-to-end solution for applying ensemble methods to classification problems, with a focus on understanding model behavior and improving prediction accuracy.
+"""
+
 import numpy as np
 import pandas as pd
-from sklearn.preprocessing import StandardScaler
-import os
-import joblib  # For loading/saving models and scalers
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
-from sklearn.metrics import classification_report
-import copy
-from copy import deepcopy as dc
-import numpy as np
-import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error
-import smote_variants as sv
 import matplotlib.pyplot as plt
-from imblearn.over_sampling import ADASYN
-from catboost import CatBoostRegressor
-import sys
-from imblearn.over_sampling import SMOTE, BorderlineSMOTE, SVMSMOTE, ADASYN, RandomOverSampler
-from copy import deepcopy as dc
+import seaborn as sns
 import os
-import numpy as np
-import pandas as pd
+import time
+import pickle
+import warnings
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, classification_report, mean_squared_error
 from xgboost.sklearn import XGBClassifier
 from skopt import BayesSearchCV
-
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
-import matplotlib.pyplot as plt
-import seaborn as sns
-import random
-from lightgbm import LGBMClassifier
-from sklearn.metrics import accuracy_score
-import os
-import time
-import os
-import numpy as np
-import pandas as pd
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
-from sklearn.metrics import classification_report
-from catboost import CatBoostClassifier
-from skopt import BayesSearchCV
-import matplotlib.pyplot as plt
-import seaborn as sns
-import joblib
-import time
-import pickle
-import time
-import pickle
 import shap
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-import os
-import warnings
 warnings.filterwarnings("ignore")
+
 
 parameter_grid_xgb = {
     'min_child_weight': [1, 5, 10, 20, 30, 40, 50],  # Minimum sum of instance weight(hessian) needed in a child
@@ -71,9 +54,9 @@ parameter_grid_xgb = {
 ########################################################################################################################
 # PARAMETERS ###########################################################################################################
 ########################################################################################################################
-split_option = 1  # Defines the type of data split. `0` for a regular train-test split, `1` for a program-based split.
+split_option = 0  # Defines the type of data split. `0` for a regular train-test split, `1` for a program-based split.
 oversampling = True # Determines whether to apply oversampling to balance the class distribution.
-specific_sample_count = 3000 # The target number of instances per class after applying oversampling.
+specific_sample_count = 2000 # The target number of instances per class after applying oversampling.
 seed = 137 # Seed for random number generators to ensure reproducibility.
 choose_y = 1  # Selector for the target variable: `0` for `y3`, `1` for `y4`, `2` for `y5`.
 opt_n_iter = 100 #100 #Numbers of Iterations for Hyperparameter Optimization
