@@ -131,7 +131,7 @@ def save_datasets(X_train, y_train, X_test, y_test, folder_name):
 ########################################################################################################################
 split_option = 0  # Defines the type of data split. `0` for a regular train-test split, `1` for a program-based split.
 oversampling = True # Determines whether to apply oversampling to balance the class distribution.
-specific_sample_count = 3000 # The target number of instances per class after applying oversampling.
+specific_sample_count = 2000 # The target number of instances per class after applying oversampling.
 seed = 137 # Seed for random number generators to ensure reproducibility.
 choose_y = 1  # Selector for the target variable: `0` for `y3`, `1` for `y4`, `2` for `y5`.
 ########################################################################################################################
